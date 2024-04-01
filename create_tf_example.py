@@ -22,7 +22,7 @@ def create_tf_example(group, path, labels):
     classes_text = []
     classes = []
 
-    for index, row in group.object.iterrows():
+    for _, row in group.iterrows():  # Use iterrows instead of group.object.iterrows()
         xmins.append(row['xmin'] / width)
         xmaxs.append(row['xmax'] / width)
         ymins.append(row['ymin'] / height)
@@ -62,8 +62,8 @@ def main():
     with open(args.labelmap, 'r') as f:
         labels = [line.strip() for line in f.readlines()]
 
-    grouped = split(examples, 'filename')
-    for group in grouped:
+    # Splitting isn't needed since we're not dealing with XML files
+    for _, group in examples.groupby('filename'):
         tf_example = create_tf_example(group, path, labels)
         writer.write(tf_example.SerializeToString())
 
