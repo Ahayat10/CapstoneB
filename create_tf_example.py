@@ -62,7 +62,7 @@ def main():
     with open(args.labelmap, 'r') as f:
         labels = [line.strip() for line in f.readlines()]
 
-    # Splitting isn't needed since we're not dealing with XML files
+    # Iterating over groups directly
     for _, group in examples.groupby('filename'):
         tf_example = create_tf_example(group, path, labels)
         writer.write(tf_example.SerializeToString())
